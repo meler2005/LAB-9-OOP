@@ -1,0 +1,44 @@
+using System;
+
+// Визначення делегата, який приймає значення типу double і повертає значення типу double
+public delegate double EquationDelegate(double x);
+
+// Клас, який містить метод для знаходження кореня рівняння методом простої ітерації
+class SimpleIteration
+{
+    // Метод для знаходження кореня рівняння
+    public double SolveEquation(EquationDelegate equation, double initialGuess, double tolerance)
+    {
+        double x0 = initialGuess; // початкове наближення
+        double x1 = equation(x0); // перше наближення
+
+        // Цикл для ітераційного вдосконалення наближення
+        while (Math.Abs(x1 - x0) > tolerance)
+        {
+            x0 = x1;
+            x1 = equation(x0);
+        }
+
+        return x1; // Повертаємо знайдений корінь рівняння
+    }
+}
+
+class TestMain
+{
+    // Приклад функції, яку будемо розв'язувати методом простої ітерації
+    static double MyEquation(double x)
+    {
+        // Приклад рівняння: x^2 - 4 = 0
+        return Math.Sqrt(4 + x); // вираз для простої ітерації
+    }
+
+    public static void Main()
+    {
+        SimpleIteration solver = new SimpleIteration(); // Створюємо екземпляр класу для знаходження кореня рівняння
+        EquationDelegate equation = new EquationDelegate(MyEquation); // Створюємо екземпляр делегата для функції рівняння
+
+        // Знаходимо корінь рівняння методом простої ітерації та виводимо результат
+        double root = solver.SolveEquation(equation, 1.0, 0.0001);
+        Console.WriteLine("Root: " + root);
+    }
+}
